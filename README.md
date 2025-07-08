@@ -121,6 +121,7 @@ The audience for this document includes:
 |:-----------------------:|:-----------------------------------------:|:---------:|:-------:|
 | Execution               | Set up replication for an S3 bucket       |    R,A    |         |
 | Security and Compliance | Set up a security policy for an S3 bucket |    R,A    |         |
+| Security and Compliance | Force encryption for an S3 bucket         |    R,A    |         |
 
 ---
 # 4. Prerequisites
@@ -198,6 +199,37 @@ For example, a bucket policy that allows public reads to all objects in a specif
       "Resource": [
         "arn:aws:s3:::examplebucket/*"
       ]
+    }
+  ]
+}
+```
+
+## 6.2. Force encryption for an S3 bucket
+
+1. Setup a Resource-based policy such that:
+  - Refuse any API call to put or get an S3 object without encryption headers.
+
+
+For example, a bucket policy that deny writes to all objects without encryption headers (SSE-KMS) in a specific S3 bucket, e.g. `examplebucket`:
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ForceEncryption",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::examplebucket/*"
+      ],
+      "Condition": {
+        "StringNotEquals": {
+          "s3:x-amz-server-side-encryption": "aws:kms"
+        }
+      }
     }
   ]
 }
