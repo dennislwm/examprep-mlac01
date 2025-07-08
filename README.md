@@ -114,6 +114,15 @@ The audience for this document includes:
 [a2.1.12]: https://ibm-learning.udemy.com/course/aws-certified-machine-learning-engineer-associate-mla-c01/
 
 ---
+# 3. User Personas
+## 3.1 RACI Matrix
+
+|        Category         |                 Activity                  | DevSecOps | Manager |
+|:-----------------------:|:-----------------------------------------:|:---------:|:-------:|
+| Execution               | Set up replication for an S3 bucket       |    R,A    |         |
+| Security and Compliance | Set up a security policy for an S3 bucket |    R,A    |         |
+
+---
 # 4. Prerequisites
 ## 4.1. SaaS
 
@@ -123,3 +132,73 @@ The audience for this document includes:
   - Login with your IBM w3 account.
 
 ## 4.2. Local Workstation
+
+---
+# 5. Execution
+## 5.1. Set up replication for an S3 bucket
+
+1. Navigate to your AWS console > S3.
+2. Create a new source bucket or choose an existing S3 bucket.
+3. Create a new target bucket or choose an existing S3 bucket (during replication set up).
+4. Enable versioning for both the source and target buckets.
+5. Select your source bucket > Management > Replication Rules.
+6. Click on Create replication rule.
+  - Replication rule name: `Demo replication`.
+  - Status: `Enabled`.
+  - Choose a rule scope: `Apply to all objects in the bucket`.
+  - Destination: `Choose a bucket in this account`.
+    - Bucket name: `my-replica-bucket`.
+  - IAM role: `Choose from existing IAM roles`.
+    - IAM role: `my-replica-iam-role`.
+  - Click Save.
+7. You will be given the option to replicate existing objects with a one-time Batch Operations job.
+  - Existing objects: `No, do not replicate existing objects`.
+  - Click Submit.
+8. By default, deletion markers are not enabled.
+9. Select your source bucket > Management > Select your replication rule > Edit rule.
+  - Under Additional replication options > Enable `Delete marker replication`.
+  - Note: Permanent deletion of objects will not be replicated.
+  - Click Save.
+10. You have successfully set up replication for an S3 bucket, with an optional deletion markers replication.
+
+---
+# 6. Security and Compliance
+## 6.1. Set up a security policy for an S3 bucket
+
+An AWS IAM principal can access an S3 object if:
+1. The User or Role IAM policy ALLOWs it; OR
+  - The Resource Bucket Policy ALLOWs it;
+2. AND there is no explicit DENY.
+
+1. Setup a User IAM policy such that:
+  - S3 bucket API calls are allowed for a specific user from IAM.
+2. Setup a Resource-based policy such that:
+  - S3 bucket API calls are allowed or denied for all or specific buckets/objects.
+  - Bucket wide policy allows users or cross accounts to access all buckets.
+  - Object Access Control List (ACL) allows users to specific objects in a bucket.
+  - Bucket ACL allows users to specific buckets.
+3. Setup encryption to encrypt objects in an S3 bucket.
+4. Block public access at:
+  - account level; OR
+  - bucket level; OR
+  - resource level.
+
+For example, a bucket policy that allows public reads to all objects in a specific S3 bucket, e.g. `examplebucket`:
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicRead",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::examplebucket/*"
+      ]
+    }
+  ]
+}
+```
