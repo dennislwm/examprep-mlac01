@@ -20,33 +20,33 @@
   - Sigmoid / Logistic / TanH
       - Nice and smooth curve
       - Scales input from 0-1 (Sigmoid / Logistic) or -1 to 1 (TanH / hyperbolic tangent)
-        □ MaxOut > PReLU > Leaky ReLU > ReLU > TanH > Sigmoid
+        - MaxOut > PReLU > Leaky ReLU > ReLU > TanH > Sigmoid
       - Changes slowly for high or low values
-        □ Vanishing gradient issue where numerical precision becomes a problem
+        - Vanishing gradient issue where numerical precision becomes a problem
       - Computationally expensive
   - Rectified Linear Unit (ReLU)
       - Easy to compute
       - Similar to binary except a linear slope instead of vertical slope
-        □ Positive numbers = linear slope
+        - Positive numbers = linear slope
       - Zero or negative values
-        □ Dying ReLU issue where input <=0 becomes a problem
+        - Dying ReLU issue where input <=0 becomes a problem
   - Leaky ReLU
       - Solved Dying ReLU issue
-        □ Uses a negative slope where input <=0
-        □ Arbitrary constant for negative slope
+        - Uses a negative slope where input <=0
+        - Arbitrary constant for negative slope
   - Parametric ReLU (PReLU)
       - Solved arbitrary constant for negative slope
-        □ Uses backpropagation to determine the constant for negative slope
-        □ Complicated and Your Mileage May Vary (YMMV)
+        - Uses backpropagation to determine the constant for negative slope
+        - Complicated and Your Mileage May Vary (YMMV)
   - Other ReLU variants
       - Exponential Linear Unit (ELU)
-        □ Negative slope is a non-linear slope
+        - Negative slope is a non-linear slope
       - Swish from Google
-        □ Not from AWS
-        □ Mostly benefit a very deep network (>40 layers)
+        - Not from AWS
+        - Mostly benefit a very deep network (>40 layers)
       - Maxout
-        □ Outputs the max value of the inputs
-        □ Doubles parameters that need to be trained, not often practical
+        - Outputs the max value of the inputs
+        - Doubles parameters that need to be trained, not often practical
 - Final output-layer activation function Softmax
   - Used in a multi-class classification problem
   - Converts outputs to probabilities of each classification
@@ -67,19 +67,19 @@
       - Local receptive fields are groups of neurons that only respond to a part of what your eyes see (subsampling)
       - They overlap each other to cover the entire visual field (convolutions)
       - They feed into higher layers that identify increasingly complex images
-        □ Some receptive fields identify horizontal lines, etc (filters)
-        □ These would feed into a layer that identify shapes
-        □ Which then feed into a layer that identify objects
-        □ For color images, extra layers for RGB
+        - Some receptive fields identify horizontal lines, etc (filters)
+        - These would feed into a layer that identify shapes
+        - Which then feed into a layer that identify objects
+        - For color images, extra layers for RGB
       - How do we know that's a stop sign?
-        □ Individual local receptive fields scan the image looking for edges, and pick up the edges of the stop sign in a layer
-        □ Those edges in turn get picked up by a higher level convolution that identifies the stop sign's shape and letters
-        □ This shape then gets matched against your pattern of known stop signs, also using strong red signal coming from your RGB layers
-        □ That information keeps getting processed upwards until the result reaches the final output layer
+        - Individual local receptive fields scan the image looking for edges, and pick up the edges of the stop sign in a layer
+        - Those edges in turn get picked up by a higher level convolution that identifies the stop sign's shape and letters
+        - This shape then gets matched against your pattern of known stop signs, also using strong red signal coming from your RGB layers
+        - That information keeps getting processed upwards until the result reaches the final output layer
 - Building a CNN with Keras / Tensorflow
   - Resource intensive (CPU, GPU and RAM)
       - Lots of hyperparameters
-        □ Kernel sizes, many layers, etc
+        - Kernel sizes, many layers, etc
   - Source data must be of appropriate dimensions
       - Width x length x color channels (one for each RGB)
       - Getting the training data is the hardest part (as well as storing and accessing it)
@@ -106,20 +106,20 @@
       - Can limit backpropagation to a limited number of time steps (truncated backpropagation through time)
   - RNN topologies
       - Sequence to sequence
-        □ Time series data, e.g. predict stock prices
+        - Time series data, e.g. predict stock prices
       - Sequence to vector
-        □ Words in a sentence to sentiment analysis
+        - Words in a sentence to sentiment analysis
       - Vector to sequence
-        □ Create captions from an image
+        - Create captions from an image
       - Sequence to vector to sequence
-        □ Encoder -> Decoder
-        □ Machine translation
+        - Encoder -> Decoder
+        - Machine translation
   - State dilution
       - This can be a problem from earlier time  steps that get diluted over time
       - Long short-term Memory (LSTM) cell
-        □ Maintains separate long-term states from short-term
+        - Maintains separate long-term states from short-term
       - Gated Recurrent Unit (GRU) cell
-        □ Simplified LSTM cell that performs equally well
+        - Simplified LSTM cell that performs equally well
   - Training RNN resource intensive
       - Very sensitive to topology, choice of hyperparameters
       - A wrong choice can lead to a RNN that doesn't converge at all
@@ -220,22 +220,24 @@
 
 - Breakdown of Measuring Classification Models
   - Shows the true positives, true negative, false positives and false negatives
+
 |  | Actual Yes | Actual No |  |
 |--|------------|-----------|--|
 | Predicted Yes | True Positive  | False Positive | Precision = Tp/(Tp+Fp)
 | Predicted No  | False Negative | True Negative  |
 |  | Recall = Tp/(Tp+Fn) | Specificity = Tn/(Tn+Fp) |
+
   - Recall = True Positive / (True Positive + False Negative)
       - True Positive Rate (aka Sensitivity) or Completeness
       - Percentage of positives rightly predicted
       - Good choice of metric when false negatives are important
-        □ Fraud detection
+        - Fraud detection
   - Precision = True Positive / (True Positive + False Positive)
       - Correct positives or accuracy of prediction
       - Percentage of relevant results
       - Good choice of metric when false positives are important
-        □ Medical screening
-        □ Drug testing
+        - Medical screening
+        - Drug testing
   - Specificity = True Negative / (True Negative + False Positive)
       - True Negative Rate
   - F1 = 2 x (Precision - Recall)/(Precision + Recall)
@@ -247,18 +249,18 @@
       - Good choice of metric when right AND wrong answers are important
   - Receiver Operating Characteristic (ROC) Curve
       - Plot of True Positive Rate (Recall) vs False Positive Rate
-        □ Various threshold settings
-        □ Points above the diagonal represent good classification
-        □ The more it is bent toward the upper-left the better
+        - Various threshold settings
+        - Points above the diagonal represent good classification
+        - The more it is bent toward the upper-left the better
       - Area Under the Curve (AUC)
-        □ Equal to probability that a classifier will rank a randomly positive instance higher than a randomly chosen negative one
-        □ ROC AUC of 0.5 is a useless classifier, 1.0 is perfect
-        □ Good choice of metric for comparing classifiers
+        - Equal to probability that a classifier will rank a randomly positive instance higher than a randomly chosen negative one
+        - ROC AUC of 0.5 is a useless classifier, 1.0 is perfect
+        - Good choice of metric for comparing classifiers
   - Precision/Recall (P-R) Curve
       - Area Under the Curve (AUC)
-        □ Similar to ROC AUC as higher AUC better
-        □ The more it is bent toward the upper-right the better
-        □ Good choice for information retrieval problems
+        - Similar to ROC AUC as higher AUC better
+        - The more it is bent toward the upper-right the better
+        - Good choice for information retrieval problems
           ® Example searching large number of documents for a tiny number that is relevant
 
 ## 152. RMSE, R-squared, MAE
@@ -283,9 +285,9 @@
       - Each resampled model can be trained in parallel
   - Boosting
       - Each model is trained in sequence
-        □ Next model takes into account the previous' models results
-        □ Re-weight data and model before running next model
-        □ First model with equal weights
+        - Next model takes into account the previous' models results
+        - Re-weight data and model before running next model
+        - First model with equal weights
 - Bagging vs Boosting
   - Model Accuracy > Boosting > Bagging
   - Prevent Overfitting > Bagging > Boosting
@@ -330,30 +332,30 @@
       - Informs which hyperparameter combination to search next
       - Can be a way to start where you left off from a stopped hyperparameter job
       - Types of warm start
-        □ IDENTICAL_DATA_AND_ALGORITHM
-        □ TRANSFER_LEARNING
+        - IDENTICAL_DATA_AND_ALGORITHM
+        - TRANSFER_LEARNING
   - Resource Limit
       - Default limits for number of
-        □ Parallel tuning jobs
-        □ Hyperparameters
-        □ Training jobs per tuning job
+        - Parallel tuning jobs
+        - Hyperparameters
+        - Training jobs per tuning job
       - Increasing this requires a quota increase from AWS Support
   - Strategy Type
       - Hyperband > Bayesian Optimization > Random Search > Grid Search
       - Grid Search
-        □ Basic brute force approach to try every possible combination
-        □ Limited to categorical hyperparameters
+        - Basic brute force approach to try every possible combination
+        - Limited to categorical hyperparameters
       - Random Search
-        □ No dependence on previous jobs, so they can run in parallel
-        □ Chooses a random combination of hyperparameters on each job
+        - No dependence on previous jobs, so they can run in parallel
+        - Chooses a random combination of hyperparameters on each job
       - Bayesian Optimization
-        □ Treats tuning as a regression problem
-        □ Learn from each run to converge on an optimal hyperparameter values
+        - Treats tuning as a regression problem
+        - Learn from each run to converge on an optimal hyperparameter values
       - Hyperband
-        □ Appropriate for algorithms that publish results iteratively
+        - Appropriate for algorithms that publish results iteratively
           ® Like training a NN over several epochs
-        □ Dynamically allocate resources, e.g. early stopping, parallel, etc
-        □ Much faster than Bayesian Optimization or Random Search
+        - Dynamically allocate resources, e.g. early stopping, parallel, etc
+        - Much faster than Bayesian Optimization or Random Search
 
 ## 156. SageMaker Autopilot / AutoML
 
@@ -378,23 +380,23 @@
 - Auto-training modes
   - Autopilot HPO if dataset > 100MB
       - Defaults to HPO if Autopilot cannot determine the size of your dataset
-        □ S3 bucket inside a private VPC
-        □ S3DataType is ManifestFile
-        □ S3Uri contains more than 1,000 items
+        - S3 bucket inside a private VPC
+        - S3DataType is ManifestFile
+        - S3Uri contains more than 1,000 items
   - Autopilot Ensembling if dataset < 100MB
   - Autopilot Hyperparameter Optimization (HPO)
       - Select algorithm relevant to your dataset
-        □ XGBoost, Linear learner, Deep Learning, etc
+        - XGBoost, Linear learner, Deep Learning, etc
       - Select range of hyperparameters
-        □ Runs up to 100 trails to find optimal values
-        □ Bayesian optimization used if dataset < 100 MB
-        □ Multi-fidelity optimization used if dataset > 100MB
-        □ Early stopping if trial is performing poorly
+        - Runs up to 100 trails to find optimal values
+        - Bayesian optimization used if dataset < 100 MB
+        - Multi-fidelity optimization used if dataset > 100MB
+        - Early stopping if trial is performing poorly
   - Autopilot Ensembling
       - Runs 10 trials with different model and parameter settings
-        □ Models are combined with a stacking ensemble method
+        - Models are combined with a stacking ensemble method
       - Trains several base models with AutoGluon library
-        □ Wider range of models, include tree-based and NN algorithms
+        - Wider range of models, include tree-based and NN algorithms
 - Autopilot intervention
   - Can add in human guidance
   - With or without code in SageMaker Studio or AWS SDK
@@ -402,9 +404,9 @@
   - Integrates with SageMaker Clarify
       - Transparency on how models arrive at predictions
       - Feature attribution
-        □ Uses SHAP Baselines / Shapley Values
-        □ Based on research paper from cooperative game theory
-        □ Assigns each feature an importance value for a given prediction
+        - Uses SHAP Baselines / Shapley Values
+        - Based on research paper from cooperative game theory
+        - Assigns each feature an importance value for a given prediction
 - Problem types
   - Binary/ multi classification
   - Regression
@@ -426,21 +428,21 @@
       - Saved internal model state at periodical intervals
       - Gradients / tensors over time as model is trained
       - Define rules for detecting unwanted conditions while training
-        □ A debug job is run for each rule you configure
+        - A debug job is run for each rule you configure
       - Logs and triggers a CloudWatch event when a rule is hit
       - Built-in rules include
-        □ Monitor system bottlenecks
-        □ Profile model framework operations
-        □ Debug model parameters
+        - Monitor system bottlenecks
+        - Profile model framework operations
+        - Debug model parameters
   - Debugger ProfilerRule
       - ProfilerReport
       - Hardware system metrics
-        □ CPUBottlenck
-        □ GPUMemoryIncrease
+        - CPUBottlenck
+        - GPUMemoryIncrease
       - Framework Metrics
-        □ StepOutlier
-        □ OverallFrameworkMetrics
-        □ MaxInitializationTime
+        - StepOutlier
+        - OverallFrameworkMetrics
+        - MaxInitializationTime
   - Built-in actions to receive notifications
       - StopTraining(), Email()
       - In response to debugger rules
@@ -452,11 +454,11 @@
       - MXNet
       - XGBoost
       - SageMaker generic estimator
-        □ Used with custom training containers
+        - Used with custom training containers
   - Debugger API available in GitHub
       - Construct hooks and rules
-        □ CreateTrainingJob
-        □ DescribeTrainingJob
+        - CreateTrainingJob
+        - DescribeTrainingJob
       - SMDebug client library lets you register hooks for accessing training data
 
 ## 159. SageMaker Model Registry
@@ -490,8 +492,8 @@
 - Breakdown of SageMaker Training Techniques
   - Training Compiler (to be deprecated)
       - Integrated with AWS Deep Learning Containers (DLCs)
-        □ Cannot bring your own container
-        □ DLCs are pre-made Docker images for Tensorflow, PyTorch, etc
+        - Cannot bring your own container
+        - DLCs are pre-made Docker images for Tensorflow, PyTorch, etc
       - Can accelerate training by up to 50%
       - Incompatible with distributed training libraries
       - Best practices to use GPU instances, enable debugging
@@ -541,19 +543,19 @@
 - Breakdown of Model Parallelism Library for PyTorch only
   - Distributed model to overcome GPU memory limits
       - Optimization state sharding
-        □ Requires a stateful optimizer, e.g. adam, fp16 etc
-        □ Generally useful for >1B parameters
-        □ Optimization state is just its weights
+        - Requires a stateful optimizer, e.g. adam, fp16 etc
+        - Generally useful for >1B parameters
+        - Optimization state is just its weights
       - Activation Checkpoint
-        □ Saves memory at the expense of computation
-        □ Reduces memory usage by clearing activations of certain layers
+        - Saves memory at the expense of computation
+        - Reduces memory usage by clearing activations of certain layers
           ® Recompute these during a backward pass
-        □ Activation Offloading
+        - Activation Offloading
           ® Swaps checkpointed activations to and from the CPU
   - Sharded Data Parallelism
       - Combines both parallel data and models
-        □ Optimizer states are sharded
-        □ Trainable parameters are also sharded
+        - Optimizer states are sharded
+        - Trainable parameters are also sharded
 
 
 ## 165. Elastic Fabric Adapter (EFA) and MiCS
