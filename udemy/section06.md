@@ -242,20 +242,37 @@
       - True Negative Rate
   - F1 = 2 x (Precision - Recall)/(Precision + Recall)
       - F1 = 2Tp / (2Tp + Fp + Fn)
+        - F1 scores vary between 0 and 1, where 1 is perfect, and 0 is the worst
       - Harmonic mean of precision and sensitivity
       - Good choice of metric when precision AND recall are important
+  - Accuracy = TP + TN / (TP + FP + FN + TN)
+      - Ratio of the number of correctly classified items to the total number of (correctly and incorrectly) classified items
+        - Ratio vary between zero (0) and one (1), with a 1 for perfect accuracy
+      - Useful for classification models
+      - Measures how close the predicted class values are to the actual values
+  - [Balanced Accuracy][r01]
+      - Metric that measures the ratio of accurate predictions to all predictions
+      - Useful in classification models, where the number of positives or negatives differ greatly from each other in an imbalanced dataset, such as when only 1% of email is spam.
+      - Defined as 0.5 * [(TP/P)+(TN/N)], with values ranging from 0 to 1
+  - Mean Absolute Error (MAE)
+      - Useful for regression problems where the goal is to predict continuous numeric values
+      - Calculates the average absolute different between the predicted and actual values
+      - Unlike MSE, MAE does not square the errors, so it is less sensitive to outliers
   - Root Mean Squared Error (RMSE)
-      - Accuracy measurement
-      - Good choice of metric when right AND wrong answers are important
+      - Limitations: Suitable for predictions, but not classifications
+      - Accuracy measurement by measuring the square root of the squared difference between predicted and actual values, and is averaged over all values
+        - Values range from zero (0) to infinity, with smaller numbers indicating a better model fit to the data
+      - Useful in regression analysis to understand model prediction error, and to indicate the presence of large errors or outliers
   - Receiver Operating Characteristic (ROC) Curve
+      - Useful accuracy metric for [binary classification models][r04]
       - Plot of True Positive Rate (Recall) vs False Positive Rate
         - Various threshold settings
         - Points above the diagonal represent good classification
         - The more it is bent toward the upper-left the better
       - Area Under the Curve (AUC)
-        - Equal to probability that a classifier will rank a randomly positive instance higher than a randomly chosen negative one
-        - ROC AUC of 0.5 is a useless classifier, 1.0 is perfect
-        - Good choice of metric for comparing classifiers
+        - Useful to compare and evaluate classification models, where area under curve represents the probability of classifier is positive
+        - ROC AUC of 0.5 is a random classifier, 1.0 is perfect
+        - Good choice of metric for evaluating classification models, but not prediction models
   - Precision/Recall (P-R) Curve
       - Area Under the Curve (AUC)
         - Similar to ROC AUC as higher AUC better
@@ -274,27 +291,57 @@
 
 ## 153. Ensemble Methods: Bagging and Boosting
 
-- Breakdown of Ensemble Methods
-  - Random forest
-      - Analogy: Monte Carlo simulation of decision trees
-      - Decision trees are prone to overfitting
-      - Make lots of decision trees and let them all vote the result
-      - How do these decision trees differ?
+- [Ensemble Methods][r02]
+  - Use of multiple learning models and algorithms to gain more accurate predictions than any single individual learning algorithm
+  - Proven to be efficient in diverse applications and learning settings
+    - Cybersecurity and fraud detection
+    - Remote sensing, predicting next steps in financial decision-making
+    - Medical diagnosis
+    - Computer vision and NLP
+  - Different types of techniques used to train models, their composition, and the way they merge the different predictions into a single inference
   - Bagging
+      - Limitations: Homogenous models
       - Random Sampling With Replacement
       - Each resampled model can be trained in parallel
+      - Examples include Random Forest and Extra Trees
+      - Random forest
+          - Analogy: Monte Carlo simulation of decision trees
+          - Decision trees are prone to overfitting
+          - Make lots of decision trees and let them all vote the result
+          - How do these decision trees differ?
   - Boosting
+      - Limitations: Homogenous models
       - Each model is trained in sequence
         - Next model takes into account the previous' models results
         - Re-weight data and model before running next model
         - First model with equal weights
-- Bagging vs Boosting
-  - Model Accuracy > Boosting > Bagging
-  - Prevent Overfitting > Bagging > Boosting
-  - Parallel Training > Bagging > Boosting
-  - Boosting yields better accuracy, but bagging avoids overfitting
-      - XGBoost is the latest method
-  - Bagging can be trained in parallel, but boosting trains model sequentially
+      - Examples include AdaBoost, Gradient Boosting, and XGBoost
+        - XGBoost
+            - Supervised algorithm that works well for detecting fraud with class imbalanced datasets
+            - Datasets can be heterogeneous with missing values and imbalanced
+            - XGBoost has built-in techniques for handling class imbalance, such as scale_pos_weight
+            - Useful for regression, classification and ranking problems
+        - Adaptive Boosting (AdaBoost)
+            - Useful for correcting errors of weak classifiers, by giving more weight to incorrectly classified data during each iteration
+              - Initially gives the same weight to each data set
+              - Repeats the process until the difference between actual and predicted values fall below an acceptable threshold
+            - Struggles with class imbalances and noisy data
+        - Gradient Boosting
+            - Uses the gradient of a loss function to improve model iteratively
+            - Unlike AdaBoost, GB does not give incorrectly classified items more weight, but it optimizes the loss function
+  - Stacking
+      - Often uses heterogeneous models, where predictions of each individual estimator are stacked together and used as input to a final estimate that handles prediction
+      - The final estimator's training process often use cross-validation
+  - Averaging
+      - Average results of each model's estimation
+  - Majority voting
+  - Bagging vs Boosting
+    - Model Accuracy > Boosting > Bagging
+    - Prevent Overfitting > Bagging > Boosting
+    - Parallel Training > Bagging > Boosting
+    - Boosting yields better accuracy, but bagging avoids overfitting
+        - XGBoost is the latest method
+    - Bagging can be trained in parallel, but boosting trains model sequentially
 
 ## 154. Automatic Model Tuning (AMT) in SageMaker
 
@@ -342,9 +389,10 @@
       - Increasing this requires a quota increase from AWS Support
   - Strategy Type
       - Hyperband > Bayesian Optimization > Random Search > Grid Search
-      - Grid Search
+      - [Grid Search][r03]
         - Basic brute force approach to try every possible combination
         - Limited to categorical hyperparameters
+        - Chooses combinations of values from the range of categorical values
       - Random Search
         - No dependence on previous jobs, so they can run in parallel
         - Chooses a random combination of hyperparameters on each job
@@ -419,7 +467,10 @@
       - Similar to R Studio
       - No hardware to manage
   - SageMaker Experiments
-      - Organize, capture, compare and search your ML jobs
+      - Limitations
+        - Lacks ML workflow orchestration or DAG visualization
+        - Lacks tools for auditing and compliance
+      - Organize, capture, compare and search your ML jobs or experiment trials
 
 ## 158. SageMaker Debugger
 
@@ -571,3 +622,10 @@
       - Sharded Data Parallelism
       - EFAs
       - Larger instances
+
+## Links
+
+[r01]: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+[r02]: https://aws.amazon.com/blogs/machine-learning/efficiently-train-tune-and-deploy-custom-ensembles-using-amazon-sagemaker/
+[r03]: https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html
+[r04]: https://docs.aws.amazon.com/machine-learning/latest/dg/binary-model-insights.html

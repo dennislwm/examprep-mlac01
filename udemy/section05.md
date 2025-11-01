@@ -1,7 +1,7 @@
 # SageMaker Built-In Algorithms
 ## 120. Intro: SageMaker Built-In Algorithms
 
-- Short intro of SageMaker Built-In Algorithms
+- Short intro of [SageMaker Built-In Algorithms][r04]
 
 ## 121. Introducing Amazon SageMaker
 
@@ -15,12 +15,17 @@
 
 ## 122. SageMaker Input Modes
 
-- Breakdown of SageMaker Input Modes
+- Breakdown of SageMaker [Input Modes][r01]
   - Default S3 File Mode
     - Slow: copy training data from S3 to local directory in Docker container
   - S3 Fast File Mode
+    - Limitations
+      - Data must reside in S3, and not with Amazon FSx for Lustre
+      - Suited for workloads with many small files
     - Fast: training can begin without waiting to copy entire data
   - S3 Pipe Mode
+    - Supports high concurrency and throughput
+    - Suited for workloads with large files
     - Stream: streams data directly from S3
   - Others
     - S3 Express One Zone for high performance in a single AZ
@@ -29,7 +34,10 @@
 
 ## 123. Linear Learner in SageMaker
 
-- Breakdown of Linear Learner (LL) in SageMaker
+- [Linear Learner (LL) in SageMaker][r02]
+  - Specifically designed to handle class imbalance by adjusting class weights
+  - Supervised learning ideal for classifications or predictions
+  - Requires less hyperparamater tuning as compared to other complex algorithms
   - Linear regression: for numeric predictions based on a fitted linear equation
   - Linear threshold: for classifications (binary or multi-class)
   - Input: CSV first column assumed to be the label
@@ -41,9 +49,15 @@
   - User can choose optimization algorithm, such as Adam, AdaGrad, SGD, etc
   - Multiple models are optimized in parallel
   - Hyperparameters: tune L1, L2 regularization
-    - Balance multiclass weights: gives each class equal importance in loss functions
+    - [Balance multiclass weights][r03]
+      - Useful for imbalanced datasets where certain classes have fewer data
+      - Assigns higher weights to under-represented classes
     - Learning rate
+      - Large learning rate can lead to faster convergence but may cause the model to overshoot the optimal solution
+      - Small learning rate can lead to slower convergence but may result in a more stable model
     - Mini batch size
+      - Large batch size can lead to poor model generalization with faster training
+      - Small batch size can lead to improve generalization but at the expense of slower training
     - L1 regularization
     - Weight decay (L2 regularization)
     - Target precision: Holds precision at this value while maximizing recall
@@ -353,6 +367,7 @@
   - Amazon algorithm for anomaly detection
   - Unsupervised training on time series data
     - Assigns a score to each data point
+    - Works well for detecting fraud because it looks for unusual patterns in all of the data points
 - Input types
   - RecordIO-protobuf or CSV
   - Both File or Pipe mode
@@ -375,7 +390,7 @@
 ## 134. Neural Topic Model in SageMaker
 
 - Use cases
-  - Classify or summarize documents based on topics
+  - Classify or summarize corpus of documents based on topics
   - Unsupervised means no labels required on data points
     - Group similar tokens
         □ For example, group tokens include bike, car, speed, train etc
@@ -573,3 +588,10 @@
 - Instance types
   - Training: CPU or GPU instance (including multi-GPU instance)
     - Size of CPU depends on vector_dim and num_entity_vectors
+
+## Links
+
+[r01]: https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html
+[r02]: https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html
+[r03]: https://builder.aws.com/content/2eux4F6yvezbPPZFWnQbdHF9HwC/linear-learner-in-sagemaker-hyperparameter-tuning
+[r04]: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html

@@ -21,7 +21,7 @@
 
 ## 90. Amazon Comprehend
 
-- Breakdown of Amazon Comprehend
+- Amazon Comprehend
   - ML model for NLP
   - Find insights and relationships in text
   - Extract key phrases, people, etc with NER
@@ -35,6 +35,9 @@
     - Person, Organisation, Location, Date, etc with confidence levels
   - Custom Entity Recognition (CER)
     - Train to recognise, such as Invoice, Policy numbers, etc
+  - Share custom models with other AWS accounts
+    - Configure a resource based IAM policy in your account
+    - Use the ImportModel API operation in the other AWS accounts to securely import the custom model
 
 ## 91. Amazon Comprehend Custom Models
 

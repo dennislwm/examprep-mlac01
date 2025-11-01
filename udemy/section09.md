@@ -88,6 +88,20 @@
 
 ## 198. SageMaker Resource Management: Automatic Scaling
 
+- Prerequisites
+  - Before you can start auto scaling, you must have already created a SageMaker AI model endpoint
+  - The flow is to register the model as a scalable target, define the scaling policy and then apply it.
+  - The two options for scaling policies are: target tracking and step scaling
+- Scaling Policy
+  - Target Tracking
+    - Choose a CloudWatch metric and target value, e.g. `InvocationsPerInstance: 70`.
+    - Application Auto Scaling will scale out (increase capacity) when InvocationsPerInstance exceeds 70.
+    - AAS will scale in (decrease capacity) when InvocationsPerInstance drops below 70.
+  - Step Scaling
+    - Scale your capacity in predefined increments based on CloudWatch alarms
+    - If the breach exceeds the first threshold, AAS will apply the first step adjustment
+    - If the breach exceeds the second threshold, AAS will apply the second step adjustment, and so on
+    - A cooldown period is used to protect against over-scaling due to multiple breaches occurring in rapid succession
 - Breakdown of Auto Scaling
   - Define target metrics, min/max capacity, cooldown periods
   - SageMaker auto-manage number of instances in production
@@ -180,6 +194,24 @@
     - Monitor models
   - Use code repository
   - Use SageMaker pipelines
+- SageMaker Pipelines
+  - Useful for orchestrating ML workflows, visualize them as a DAG, and leverages ML Lineage Tracking for audit and compliance
+  - Conditional steps to introduce manual approvals in the ML workflow
+  - Integrations
+    - Seamless integration with ML Lineage Tracking
+    - SageMaker Pipelines [callback step][r01] waits for an external task, such as AWS Glue job, to complete. The output of the task, stored in S3, is then passed to subsequent steps in the pipeline.
+  - Limitations
+    - AWS Glue job cannot be directly integrated as processing step, as it is not a SageMaker-native processing task
+- [SageMaker ML Lineage Tracking][r03]
+  - Limitations
+    - Does not enforce governance
+    - Lacks built-in mechanisms for validating or approving models for deployment
+  - Creates and stores information about steps of a ML workflow from data preparation to model deployment
+    - Automatically creates a connected graph of lineage entity metadata tracking your workflow
+    - Input artifacts -> Processing component -> Dataset artifact, Image artifact, etc -> Training Job component -> Model artifact -> Model Package artifact -> Endpoint action -> Endpoint context
+  - Reproduce workflow steps, track model and dataset lineage, and establish model governance and audit standards
+  - Keep a running history of model discovery experiments
+
 
 ## 205. What is Docker?
 
@@ -376,7 +408,9 @@
 
 ## 227. AWS Lake Formation
 
-- Breakdown of Lake Formation
+- [AWS Lake Formation][r02]
+  - Specifically designed to aggregate and centrally managed large datasets from S3, databases, etc
+  - Large scale preprocessing
   - Built on top of AWS Glue
     - No cost for Lake Formation
     - Cost for underlying services, such as Glue, S3, Redshift, etc
@@ -407,3 +441,9 @@
 - Breakdown of Data Filters
   - Applied when granting SELECT permissions on tables
   - Granular access control with row and cell level security
+
+## Links
+
+[r01]: https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps-types.html#step-type-callback
+[r02]: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
+[r03]: https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html

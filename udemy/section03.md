@@ -135,20 +135,21 @@
 
 ## 63. Binning, Transforming, Encoding, Scaling, and Shuffling
 
-- Breakdown of binning
+- Binning
   - Buckets with a specified range
   - Quantile binning ensures even sizes of bins
   - Transforms numeric data to ordinal data
-- Breakdown of transforming
+- Transforming
   - Apply a function to a feature to make it better suited for training
   - Exponential data may benefit from a log transform
-- Breakdown of encoding
-  - Transforms data to a new representation, e.g. one-hot encoding
+- One-hot encoding
+  - Transforms categorical data to a numerical representation, e.g. one-hot encoding
   - Very common in deep learning, where categories are represented by individual output neurons.
-- Breakdown of scaling or normalization
-  - Distribute data normally around zero
+- Standardizing or normalization
+  - Used to ensure that numerical features with different units contribute equally to a model
+  - Distribute data normally around a mean of zero
   - Remember to scale your results back up
-- Breakdown of shuffling
+- Shuffling
   - Remove any bias resulting from the order in which they were collected
 
 ## 64. SageMaker is now SageMaker AI
@@ -228,6 +229,10 @@
 
 ## 70. SageMaker Data Wrangler
 
+- Limitations
+  - Does not have feature for detecting or grouping duplicate records, especially those requiring fuzzy matching.
+  - Lacks ML-based features, such as AWS Glue FindMatches.
+  - Lacks large scale preprocessing (ETL) features or automating schema inference
 - Breakdown of SageMaker Data Wrangler
   - Visual GUI to prepare data for machine learning
   - Ability to import, transform and visualize data
@@ -241,7 +246,15 @@
 
 ## 72. SageMaker Model Monitor and SageMaker Clarify
 
-- Breakdown of SageMaker Model Monitor
+- Data drift vs Model drift
+  - Data drift occurs when the distribution of input data changes over time
+    - Usually occurs when new data received is different from what it was trained on
+  - Model drift happens when the model's underlying parameters or assumptions become outdated
+    - For example, a decline in the accuracy of model predictions
+    - Retrain model with updated data
+- [SageMaker Model Monitor][r02]
+  - Limitations: Does not auto-remediate drifts, but notifications through CloudWatch
+  - Useful for continuous tracking data drift, model drift, bias drift, feature attribution drift
   - Metrics are emitted to CloudWatch, and notification through CloudWatch
   - Detects data drift
     - Drift in data quality relative to a baseline
@@ -251,10 +264,25 @@
   - Detects anomalies and outliers
   - Detects new features
   - Integrates with SageMaker Clarify
-- Breakdown of SageMaker Clarify
-  - Detects data bias
-  - Helps explain model behaviour, which feature contributes the most to prediction
+- SageMaker Clarify
+  - Limitations: Detects data bias, but not data drift
+  - [Model explainability][r03]
+    - Helps explain model behaviour, which feature contributes the most to prediction
+    - SHAP (Shapeley Additive Explanations)
+      - SHAP is based on the concept of a Shapley value
+      - Local method that assigns each feature an importance value for a particular perdiction
+    - Partial Dependence Plot (PDP)
+      - Global method that shows the marginal effect features have on the prediction
+      - Unlike SHAP, PDP method is computationally less intensive
   - Metrics for data bias
+    - [Conditional Demographic Disparity (CDD)][r04]
+      - Focuses on measuring differences in prediction rates, not the correctness of predictions
+      - Conditioned on a specific feature like income to detect bias that may not be apparent when considering overall outcomes
+      - A facet can be either favoured (majority) or disfavoured (minority)
+      - A facet disparity exists when the rate at which a disfavoured facet were rejected exceeds the rate at which they are accepted
+        - For example, a disparity exists where women comprise 46% of rejected applicants and 32% of accepted applicants, as the rejected rate exceeds the accepted rate.
+      - A conditional facet disparity metric that conditions on a specific feature, such as department, which may reveal a different outcome
+        - For example, women were shown to have a higher accepted rate than men when conditioned by department
     - Class Imbalance (CI)
     - Difference in Proportions Labels (DPL)
     - Kullback-Leibler Divergence (KL)
@@ -294,6 +322,11 @@
 ## 76. AWS Glue
 
 - Breakdown of AWS Glue
+  - [AWS Glue FindMatches][r01]
+    - Feature to detect duplicate records, even when the records are not exact matches
+    - Uses machine learning to find similarities across columns
+    - Minimal coding required due to ML-based approach
+    - Works with large datasets in S3
   - Serverless discovery and definition of table definitions and schema
     - S3 data lake, RDS, Redshift, DB, etc
     - Glue crawler scans data and creates schema
@@ -394,3 +427,10 @@
 - Breakdown of Athena Fine-Grained Access to AWS Glue Data Catalog
   - IAM: DB and table-level security, e.g. glue:GetDatabase
     - Policies to restrict access, such as DROP DATABASE
+
+## Links
+
+[r01]: https://builder.aws.com/content/2c0dOcTyJPnK1NR7H05Oii4HblJ/aws-glue-findmatches-for-incremental-record-matching
+[r02]: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+[r03]: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html
+[r04]: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html
