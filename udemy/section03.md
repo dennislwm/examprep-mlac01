@@ -311,8 +311,18 @@
 
 ## 75. SageMaker Canvas
 
-- Breakdown of SageMaker Canvas
-  - No-code auto-ML GUI for business analyst
+- [SageMaker Canvas][r05]
+  - No-code/Low-code auto-ML GUI for business analyst
+    - Chat with LLMs to perform tasks
+  - Use cases
+    - Predict customer churn
+    - Plan inventory efficiently
+    - Optimize price and revenue
+    - Classify text or images based on custom categories
+    - Identify objects and text in images
+    - Extract information from documents
+  - Access ready-to-use models, including Rekognition, Textract, Comprehend etc
+  - build a custom model trained on your data
   - Upload CSV, create joins
   - Classification or regression
   - Auto-cleansing for missing values, outliers, duplicate, etc.
@@ -434,3 +444,4 @@
 [r02]: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
 [r03]: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html
 [r04]: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html
+[r05]: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-byom.html

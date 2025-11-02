@@ -123,8 +123,37 @@
     - AWS::SageMaker::Model resources creates a model to host at an endpoint
     - IaC code for repeatable deployment
 - Types of Inference
-  - Real-time inference: for low latency interactive workloads
-  - Asynchronous inference: low latency for large workloads (queued requests)
+  - [Real-time inference][r06]
+    - main settings: autoscaling policy, compute resource selection, deployment mode
+      - deployment mode: single model, multi-model, and inference pipeline
+    - limitations: max payload is 6MB with a 60s timeout via HTTPS
+    - for low latency interactive workloads with no cold starts
+    - fully managed persistent endpoint and support autoscaling
+    - does not scale down to zero (0) when there are no requests
+  - [Serverless inference][r07]
+    - Limitations: max payload is 4MB with a 60s timeout via HTTPS
+    - main settings: memory size
+    - on-demand inference is ideal for workloads which have idle periods between traffic spurts and can tolerate colds tarts
+    - automatically launch compute resources and scale them out or in depending on traffic
+    - auto scale the instance count do zero (0) when there are no requests
+  - [Asynchronous inference][r04]
+    - main settings: compute, autoscaling policy, concurrency, notification
+    - limitations
+      - max payload is 1GB with a 15m timeout via S3 bucket
+      - unlike serverless and real-time, the request and response for asynchronous is in an S3 bucket
+    - ideal for large payload sizes (up to 1GB), long processing times, (up to 1 hour), and low latency
+    - low latency for large workloads (queued requests)
+    - auto scale the instance count to zero (0) when there are no requests to process
+  - [Batch transform][r05]
+    - main settings: compute, concurrency, batch strategy
+    - run inference when you don't need a persistent endpoint
+    - starts parallel compute instances and distributes the workload between them
+    - Limitations
+      - max payload is 100MB with no timeout via S3 bucket
+      - similar to async, the request and response is in an S3 bucket
+      - Image file formats are not supported
+      - input CSVs as S3 objects with different keys, where one instance might process one key
+    - output files are named <input-csv>.out and stored in a single bucket key, eg. s3:<bucket-name>/output/
 
 ## 200. SageMaker Serverless Inference and Recommender
 
@@ -442,8 +471,29 @@
   - Applied when granting SELECT permissions on tables
   - Granular access control with row and cell level security
 
+## Appendix A. SageMaker Script Mode
+
+- [Sagemaker Script Mode][r08]
+  - Allow custom ML algorithms with widely used frameworks, such as PyTorch, scikit-learn, etc without creating bespoke containers
+  - Utilizing common ML framework containers maintained by AWS
+  - The first level of script mode
+    - ability to define your own training job, model, and inference process without any dependencies
+    - done using a customized Python script and pointing that script as the entry point when defining your SageMaker training estimator
+  - Second level of script mode
+    - ability to modularize and logically organize your custom training jobs, models, and inference processes
+    - done by stipulating the source directory when defining your SageMaker training estimator
+  - Third level of script mode
+    - ability to bring your own libraries and dependencies to support custom functions within your models, training jobs, and inference processes
+    - custom libraries don't have to be in the same directory as your entrypoint Python script
+
 ## Links
 
 [r01]: https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps-types.html#step-type-callback
 [r02]: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
 [r03]: https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html
+[r04]: https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
+[r05]: https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html
+[r06]: https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints.html
+[r07]: https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+[r08]: https://aws.amazon.com/blogs/machine-learning/bring-your-own-model-with-amazon-sagemaker-script-mode/
+[r09]: https://caylent.com/blog/sagemaker-inference-types

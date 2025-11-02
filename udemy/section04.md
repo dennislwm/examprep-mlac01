@@ -23,9 +23,13 @@
 
 - Amazon Comprehend
   - ML model for NLP
-  - Find insights and relationships in text
+  - Find insights and relationships in unstructured text
   - Extract key phrases, people, etc with NER
-  - Detect PII
+  - Detect PII within text, eg names or credit card numbers
+    - Returns a confidence score for PII identification
+    - Similar to Macie, uses a rules-based engine to identify PII stored in S3
+    - Unlike Macie, ML-based detection uses semantic understanding of longer chunks of text to identify PII, instead of relying on specific keywords
+  - Use Comprehend as part of [Data Wrangler data preparation workflow][r02]
   - Understand text sentiment
   - Auto-organization of text files by topic
   - Use cases: analyze emails, group files by topic
@@ -125,9 +129,10 @@
 
 ## 99. Amazon Rekognition
 
-- Breakdown of Amazon Rekognition
+- Amazon Rekognition
   - Insights into images or videos using ML
     - Faces
+      - Matches a provided face image against a [collection of stored face data][r01] to verify individuals
     - Objects
     - Text extraction
     - Personal Protective Equipment (PPE) detection, e.g. face mask, helmet, etc
@@ -319,3 +324,8 @@
 ## 119. Amazon Q Developer - Hands On
 
 - Demo of Amazon Q Developer - Hands On
+
+## Links
+
+[r01]: https://docs.aws.amazon.com/rekognition/latest/dg/collections.html
+[r02]: https://aws.amazon.com/blogs/machine-learning/automatically-redact-pii-for-machine-learning-using-amazon-sagemaker-data-wrangler/

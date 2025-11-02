@@ -41,6 +41,7 @@
   - Linear regression: for numeric predictions based on a fitted linear equation
   - Linear threshold: for classifications (binary or multi-class)
   - Input: CSV first column assumed to be the label
+    - Using (x,y) where x is a highly dimensional vector, and y is a numeric label
 - Preprocessing
   - LL can auto-normalize training data so all features are weighed the same
   - Input data should be shuffled
@@ -70,14 +71,15 @@
 
 - Breakdown of XGBoost in SageMaker
   - Extreme Gradient Boosting: boosted group of decision trees, where new trees are made to correct the errors of previous trees
-  - Can be used for classification and predictions (using regression trees)
+  - Can be used for both classification and predictions (using regression trees)
   - Fast and has been used in lots of Kaggle competitions
   - Based on the open-source XGBoost
   - Input: CSV, Parquet, recordIO-protobuf
+    - Can use tabular data
 - Training
   - Can use as a framework within notebooks, e.g. Sagemaker.xgboost.
   - Or as a built-in SageMaker algorithm
-  - Hyperparameters: there are a lot of them
+  - [Hyperparameters][r05]
     - Subsample: prevents overfitting
     - ETA: Step size shrinkage, prevents overfitting
     - Gamma: Minimum loss reduction to create a partition (larger means more conservative)
@@ -589,9 +591,27 @@
   - Training: CPU or GPU instance (including multi-GPU instance)
     - Size of CPU depends on vector_dim and num_entity_vectors
 
+## Appendix A. Logistic Regression
+
+- [Logistic Regression][r06]
+  - Use cases
+    - Business questions with a yes or no, eg do rainy days impact our daily sales?
+    - Client transactions with multiple categories, eg what type of credit card activity is this? (authorized, fraudulent, potential fraudulent)
+  - Types of logistic regression
+    - Binary: Two possible outcomes for classification problem, eg 0 or 1
+    - Multinomial: Several possible outcome as long as the number of outcomes is finite, eg 0.1, 0.2, 0.3 etc
+    - Ordinal: Special type of multinomial regression outcomes represent ranks, eg rank as poor, fair, good etc
+  - Comparison vs linear regression
+    - Unlike linear regression, logistic regression is a classification algorithm
+  - Comparison vs deep learning
+    - Logistic regression is less complex and less compute intensive
+    - Calculations are transparent and easier to troubleshoot
+
 ## Links
 
 [r01]: https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html
 [r02]: https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html
 [r03]: https://builder.aws.com/content/2eux4F6yvezbPPZFWnQbdHF9HwC/linear-learner-in-sagemaker-hyperparameter-tuning
 [r04]: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+[r05]: https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html
+[r06]: https://aws.amazon.com/what-is/logistic-regression/
